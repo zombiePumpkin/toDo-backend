@@ -1,0 +1,20 @@
+{
+  "name": "toDo",
+  "type": "commonjs",
+  "version": "1.0.0",
+  "description": "Personal organization",
+  "main": "app.js",
+  "author": "Jose Pena",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "10.0.0",
+    "express": "4.17.2",
+    "mongoose": "6.1.4"
+  },
+  "scripts": {
+    "dev": "node ./src/app.js"
+  },
+  "devDependencies": {
+    "prettier": "2.5.1"
+  }
+}
