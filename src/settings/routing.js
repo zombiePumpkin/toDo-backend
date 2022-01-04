@@ -1,7 +1,5 @@
-const taskRoute = require('../routes/taskRoute')
+import { taskRoute } from '../routes/taskRoute.js'
 
-function loadRouting(app, express) {
+export function loadRouting(app, express) {
   app.use('/api', taskRoute(express))
 }
-
-module.exports = { loadRouting }

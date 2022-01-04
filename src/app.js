@@ -1,10 +1,9 @@
-const express = require('express')
-// const mongoose = require('mongoose')
-const dotenv = require('dotenv')
+import express from 'express'
+import dotenv from 'dotenv'
 
-const { loadDatabase } = require('./settings/database')
-const { loadRouting } = require('./settings/routing')
-const { loadServer } = require('./settings/server')
+import { loadDatabase } from './settings/database.js'
+import { loadRouting } from './settings/routing.js'
+import { loadServer } from './settings/server.js'
 
 dotenv.config()
 const port = process.env.APP_PORT

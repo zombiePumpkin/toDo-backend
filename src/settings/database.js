@@ -1,5 +1,3 @@
-function loadDatabase() {
+export function loadDatabase() {
   console.log('... Database loaded.')
 }
-
-module.exports = { loadDatabase }

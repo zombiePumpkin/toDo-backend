@@ -1,6 +1,6 @@
-const taskController = require('../controllers/task')
+import * as taskController from '../controllers/taskController.js'
 
-module.exports = function taskRoute(express) {
+export function taskRoute(express) {
   const task = express.Router()
 
   task.get('/task', taskController.show)
