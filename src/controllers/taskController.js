@@ -1,15 +1,42 @@
-export function show(req, res) {
-  console.log('this function show something')
+import { taskModel } from '../models/taskModel.js'
+
+export async function show(req, res) {
+  try {
+    const taskCollection = await taskModel.find()
+    return res.json({ ...taskCollection })
+  } catch (error) {
+    console.log(error)
+  }
 }
 
-export function insert(req, res) {
-  console.log('this function insert something')
+export async function insert(req, res) {
+  const postInfo = { ...req.body }
+
+  try {
+    if (!postInfo.description) {
+      return console.log('[Error] - There is no description')
+    }
+
+    if (!postInfo.createdAt) postInfo.createdAt = new Date()
+
+    if (!postInfo.done) postInfo.done = false
+
+    const task = new taskModel({
+      description: postInfo.description,
+      done: postInfo.done,
+      createdAt: postInfo.createdAt,
+    })
+
+    console.log(postInfo)
+
+    await task.save()
+
+    return
+  } catch (error) {
+    console.log(error)
+  }
 }
 
-export function update(req, res) {
-  console.log('this function update something')
-}
+export async function update(req, res) {}
 
-export function remove(req, res) {
-  console.log('this function remove something')
-}
+export async function remove(req, res) {}
