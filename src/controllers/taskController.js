@@ -1,42 +1,87 @@
 import { taskModel } from '../models/taskModel.js'
+import {
+  ReqException,
+  NullException,
+  NotFoundException,
+} from '../utilities/exceptionBuilder.js'
 
 export async function show(req, res) {
   try {
-    const taskCollection = await taskModel.find()
-    return res.json({ ...taskCollection })
+    const paramId = req.params.id
+
+    if (paramId) {
+      const task = await taskModel.findOne({ _id: paramId })
+      return res.json(task)
+    } else {
+      const taskCollection = await taskModel.find()
+      return res.json(taskCollection)
+    }
   } catch (error) {
-    console.log(error)
+    if (error.name === 'CastError') return res.json(ReqException(error))
+
+    return res.json(error)
   }
 }
 
 export async function insert(req, res) {
-  const postInfo = { ...req.body }
+  const reqBody = { ...req.body }
 
   try {
-    if (!postInfo.description) {
-      return console.log('[Error] - There is no description')
-    }
+    if (!reqBody.description) throw new NullException('description')
 
-    if (!postInfo.createdAt) postInfo.createdAt = new Date()
+    if (!reqBody.done) reqBody.done = false
 
-    if (!postInfo.done) postInfo.done = false
+    reqBody.createdAt = new Date()
 
     const task = new taskModel({
-      description: postInfo.description,
-      done: postInfo.done,
-      createdAt: postInfo.createdAt,
+      description: reqBody.description,
+      done: reqBody.done,
+      createdAt: reqBody.createdAt,
     })
-
-    console.log(postInfo)
 
     await task.save()
 
-    return
+    return res.json(task)
   } catch (error) {
-    console.log(error)
+    if (error.name === 'CastError') return res.json(ReqException(error))
+
+    return res.json(error)
   }
 }
 
-export async function update(req, res) {}
+export async function update(req, res) {
+  const paramId = req.params.id
+  const reqBody = { ...req.body }
 
-export async function remove(req, res) {}
+  try {
+    const task = await taskModel.findOne({ _id: paramId })
+
+    if (reqBody.description) task.description = reqBody.description
+
+    if (reqBody.done) task.done = reqBody.done
+
+    await task.save()
+
+    return res.json(task)
+  } catch (error) {
+    if (error.name === 'CastError') return res.json(ReqException(error))
+
+    return res.json(error)
+  }
+}
+
+export async function remove(req, res) {
+  const paramId = req.params.id
+
+  try {
+    const task = await taskModel.findOneAndRemove({ _id: paramId })
+
+    if (!task) throw new NotFoundException('id')
+
+    return res.json()
+  } catch (error) {
+    if (error.name === 'CastError') return res.json(ReqException(error))
+
+    return res.json(error)
+  }
+}
