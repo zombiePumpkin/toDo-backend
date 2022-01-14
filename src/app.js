@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import express from 'express'
+import helmet from 'helmet'
 import bodyParser from 'body-parser'
 import dotenv from 'dotenv'
 
@@ -15,6 +16,7 @@ const app = express()
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+app.use(helmet())
 app.use(allowCors)
 
 loadDatabase(mongoose)
